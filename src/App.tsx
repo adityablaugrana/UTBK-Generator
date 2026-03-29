@@ -21,6 +21,7 @@ declare global {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('solver');
+  const [selectedModel, setSelectedModel] = useState<'pro' | 'flash'>('pro');
   const [hasKey, setHasKey] = useState<boolean>(true);
   
   useEffect(() => {
@@ -224,8 +225,10 @@ export default function App() {
         promptParts.push({ text: "Selesaikan soal yang diberikan di atas." });
       }
 
+      const modelName = selectedModel === 'pro' ? 'gemini-3.1-pro-preview' : 'gemini-3-flash-preview';
+      
       const response = await currentAi.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
+        model: modelName,
         contents: { parts: promptParts },
         config: {
           systemInstruction: systemInstruction,
@@ -287,7 +290,7 @@ export default function App() {
           )}
         </header>
 
-        <div className="flex p-1 bg-slate-200 rounded-2xl mb-8 max-w-md mx-auto">
+        <div className="flex p-1 bg-slate-200 rounded-2xl mb-4 max-w-md mx-auto">
           <button
             onClick={() => { setActiveTab('solver'); setResult(null); }}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${
@@ -310,6 +313,32 @@ export default function App() {
             <PlusCircle className="w-4 h-4" />
             Generator
           </button>
+        </div>
+
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pilih Model API:</span>
+          <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+            <button
+              onClick={() => setSelectedModel('pro')}
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                selectedModel === 'pro' 
+                  ? 'bg-indigo-600 text-white shadow-sm' 
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              Gemini Pro (Genius)
+            </button>
+            <button
+              onClick={() => setSelectedModel('flash')}
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                selectedModel === 'flash' 
+                  ? 'bg-indigo-600 text-white shadow-sm' 
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              Gemini Flash (Cepat)
+            </button>
+          </div>
         </div>
 
         <main className="space-y-8">
