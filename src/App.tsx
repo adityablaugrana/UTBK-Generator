@@ -38,6 +38,8 @@ export default function App() {
     if (window.aistudio?.openSelectKey) {
       await window.aistudio.openSelectKey();
       setHasKey(true);
+    } else {
+      alert("Fitur ini hanya tersedia di lingkungan AI Studio. Di Netlify, silakan atur GEMINI_API_KEY di Site Settings.");
     }
   };
   const [textQuestion, setTextQuestion] = useState('');
@@ -125,8 +127,14 @@ export default function App() {
     setResult(null);
 
     try {
+      const apiKey = process.env.GEMINI_API_KEY;
+      
+      if (!apiKey && !window.aistudio) {
+        throw new Error("API Key tidak ditemukan. Pastikan Anda sudah mengatur GEMINI_API_KEY di environment variables Netlify dan melakukan re-deploy.");
+      }
+
       // Create a fresh instance right before the call to ensure the latest key is used
-      const currentAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const currentAi = new GoogleGenAI({ apiKey: apiKey || '' });
       const promptParts: any[] = [];
       
       const solverInstruction = `
