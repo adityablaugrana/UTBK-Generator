@@ -3,6 +3,9 @@ import { GoogleGenAI } from '@google/genai';
 import { Upload, Image as ImageIcon, FileText, X, Loader2, Brain, Sparkles, PlusCircle, BookOpen, Settings2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import { motion, AnimatePresence } from 'motion/react';
 import mammoth from 'mammoth';
 
@@ -142,10 +145,14 @@ export default function App() {
         Tugas Anda adalah menyelesaikan soal yang diberikan.
         
         PENTING: 
-        - JANGAN gunakan notasi LaTeX atau simbol matematika yang dibungkus dengan tanda dollar ($).
-        - JANGAN gunakan kode mentah seperti \\sim, \\rightarrow, \\lor, dll.
-        - Gunakan teks biasa atau simbol standar yang mudah dibaca (misal: gunakan '~' atau 'TIDAK' untuk negasi, '->' atau 'MAKA' untuk implikasi, 'ATAU' untuk disjungsi).
-        - Pastikan output bersih, rapi, dan tidak mengandung karakter teknis yang mengganggu pembacaan.
+        - Gunakan notasi LaTeX untuk rumus matematika, fungsi, dan simbol teknis.
+        - Gunakan tanda dollar ganda ($$) untuk rumus yang ingin ditampilkan di baris baru (display mode).
+        - Gunakan tanda dollar tunggal ($) untuk rumus di dalam kalimat (inline mode).
+        - Pastikan output bersih, rapi, dan profesional.
+
+        ATURAN FORMATTING KHUSUS:
+        - Jika ada opsi jawaban (A, B, C, D, E), buatlah dalam bentuk LIST KE BAWAH (satu baris per opsi).
+        - Setiap kalimat atau poin pembahasan dalam penjelasan HARUS dibuat per baris (gunakan double newline atau bullet points) agar mudah dibaca. JANGAN menumpuk teks dalam satu paragraf panjang.
 
         FORMAT OUTPUT HARUS SANGAT RAPI:
         
@@ -167,11 +174,14 @@ export default function App() {
         Tugas Anda adalah membuat ${numQuestions} butir soal UTBK yang berkualitas tinggi.
         
         PENTING:
-        - JANGAN gunakan notasi LaTeX atau simbol matematika ($).
-        - Gunakan simbol standar (~, ->, ATAU, DAN).
+        - Gunakan notasi LaTeX ($ atau $$) untuk semua rumus matematika dan simbol teknis.
         - Soal harus memiliki tingkat kesulitan yang setara dengan UTBK asli (HOTS).
         - Jika user memberikan referensi (teks, gambar, atau dokumen), buatlah soal yang TERINSPIRASI atau BERDASARKAN topik dari referensi tersebut.
         - Jika tidak ada referensi, buatlah soal secara otomatis dengan topik yang bervariasi (TPS, Literasi, atau Penalaran Matematika).
+
+        ATURAN FORMATTING KHUSUS:
+        - Opsi jawaban (A, B, C, D, E) HARUS dibuat LIST KE BAWAH.
+        - Setiap kalimat atau poin pembahasan dalam penjelasan HARUS dibuat per baris (gunakan double newline atau bullet points).
 
         FORMAT OUTPUT HARUS SANGAT RAPI DENGAN JARAK BARIS (DOUBLE NEWLINE):
         
@@ -544,7 +554,10 @@ export default function App() {
                   </button>
                 </div>
                 <div className="p-6 sm:p-8 prose prose-slate prose-indigo max-w-none">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
+                  >
                     {result}
                   </ReactMarkdown>
                 </div>

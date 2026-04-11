@@ -1,5 +1,5 @@
 {
-  "name": "Remix: UTBK Genius Solver AI",
-  "description": "Aplikasi AI untuk memecahkan soal UTBK dan PTN",
+  "name": "UTBK Genius Solver AI with LaTeX",
+  "description": "Aplikasi AI untuk memecahkan soal UTBK dan PTN dengan dukungan rumus LaTeX yang rapi",
   "requestFramePermissions": []
 }
